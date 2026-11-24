@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "loggly-sdk"
+dynamic = ["version"]
+description = "Python client and command-line tools for searching, analyzing and sending Loggly events"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["loggly", "logging", "cli"]
+classifiers = [
+    "Environment :: Console",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: System :: Logging",
+]
+
+[project.scripts]
+loggly = "loggly:main"
+
+[tool.setuptools]
+py-modules = ["loggly"]
+
+[tool.setuptools.dynamic]
+version = {attr = "loggly.VERSION"}
+
+[tool.setuptools.data-files]
+"share/man/man1" = ["man/man1/loggly.1"]

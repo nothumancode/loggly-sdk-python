@@ -1,0 +1,3 @@
+include loggly REVIEW.md
+recursive-include skills/loggly *.md *.yaml
+include tests/test_unit.py tests/test_contract.py

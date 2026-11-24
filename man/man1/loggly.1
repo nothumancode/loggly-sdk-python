@@ -1,0 +1,82 @@
+.TH LOGGLY 1 "2026-11-24" "Loggly SDK 4.0.0"
+.SH NAME
+loggly \- portable Loggly API clients
+.SH SYNOPSIS
+.B loggly
+.RI [ --dry-run ]
+.I command
+.RI [ arguments ]
+.SH DESCRIPTION
+Shell, Python, Lua and Nushell implementations share this command contract. API responses are raw bytes. Local discovery needs no credentials.
+.SH COMMANDS
+.TP
+.B "search q=QUERY [from=TIME] [until=TIME] [order=asc/desc] [size=N]"
+Legacy/deprecated. Create a search and return its result identifier (RSID); use events to retrieve it. Prefer iterate for new workflows.
+.TP
+.B "events rsid=ID [page=N] [format=json/raw/csv] [columns=CSV]"
+Legacy/deprecated. Retrieve a page from a search RSID. JSON is the default; raw and CSV are also available. Legacy search retrieval is limited to 5000 events.
+.TP
+.B "iterate [q=QUERY] [from=TIME] [until=TIME] [size=N] [order=asc/desc]"
+Search and retrieve the first page in one call. Follow next within ten minutes if present.
+.TP
+.B "next URL"
+Retrieve the next iterator page using an unmodified same-account pagination URL.
+.TP
+.B "count [q=QUERY] [from=TIME] [until=TIME] [include_volume=true/false]"
+Count matching events; optionally retrieve their combined volume in bytes.
+.TP
+.B "fields [q=QUERY] [from=TIME] [until=TIME] [facet_size=N]"
+List parsed field names matching a search; maximum 500 fields.
+.TP
+.B "field FIELD [q=QUERY] [from=TIME] [until=TIME] [facet_size=N]"
+Retrieve values and occurrence counts for one parsed field; maximum 300 values.
+.TP
+.B "stats TYPE FIELD [q=QUERY] [from=TIME] [until=TIME]"
+Compute statistics for a numeric indexed field. Requires an eligible Enterprise subscription.
+.TP
+.B "usage from=TIME until=TIME [group_by=VALUE ...] [host=VALUE ...] [app=VALUE ...] [measurement_types=VALUE ...]"
+Retrieve log volume and event counts, optionally grouped and filtered.
+.TP
+.B "customer"
+Retrieve account information, including sensitive ingestion tokens. Do not include its output in agent context unnecessarily.
+.TP
+.B "users"
+Retrieve active account users; output may contain personal information.
+.TP
+.B "send - TAGS CONTENT_TYPE < FILE"
+Submit one event, including multiline text or JSON. Documented maximum event size is 1 MB.
+.TP
+.B "bulk - TAGS CONTENT_TYPE < FILE"
+Submit newline-separated events. Documented maximum batch size is 5 MB and 1 MB per event.
+.TP
+.B "pixel - [--tags TAGS] [key=value ...] > pixel.gif"
+Submit log data through a tracking pixel GET request. Standard output contains GIF bytes, not JSON.
+.TP
+.B "request METHOD /PATH [key=value ...] [< BODY]"
+Call an additional same-account API path. POST, PUT and PATCH send stdin as JSON; supply their query in the path. HEAD returns headers. Other output depends on the endpoint.
+.SH DISCOVERY
+.B loggly help [COMMAND]
+.br
+.B loggly tools
+.br
+.B loggly schema COMMAND
+.br
+.B loggly version
+.br
+.B loggly doctor
+.br
+.B loggly examples [COMMAND]
+.br
+.B loggly completion bash|zsh|fish|nu
+.br
+.B loggly skill list
+.br
+.B loggly skill show [RESOURCE]
+.SH ENVIRONMENT
+LOGGLY_API_TOKEN and LOGGLY_SUBDOMAIN are required for every API call. Ingestion also requires LOGGLY_CUSTOMER_TOKEN when using the hyphen token sentinel. Doctor reports configuration booleans only. Dry-run validates without network access or reading stdin.
+.SH EXIT STATUS
+0 on success; 2 for local validation errors; 22 for HTTP redirects and errors; other codes indicate transport failures. No automatic redirects, retries or pagination.
+.SH SECURITY
+Log content is untrusted and may contain sensitive data. Never expose tokens. Pixel GET submits data. Temp files used by shell/Lua are private and removed on handled exits.
+.SH SEE ALSO
+The repository README and skills/loggly references describe installation, completion and native APIs.

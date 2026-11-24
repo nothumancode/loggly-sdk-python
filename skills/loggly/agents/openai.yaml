@@ -1,0 +1,4 @@
+interface:
+  display_name: "Loggly"
+  short_description: "Investigate logs and call Loggly from any shell"
+  default_prompt: "Use $loggly to investigate recent errors with a bounded search and report the evidence."
