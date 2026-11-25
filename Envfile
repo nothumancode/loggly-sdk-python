@@ -1,0 +1,14 @@
+# Envfile (safe to commit)
+# ------------------------
+
+strict true
+
+env "TWINE_PASSWORD", encrypted: true, redacted: true
+env "TWINE_USERNAME", encrypted: true, redacted: true
+
+# additionally found in code
+env "LOGGLY_API_TOKEN", optional: true
+env "LOGGLY_CUSTOMER_TOKEN", optional: true
+env "LOGGLY_SUBDOMAIN", optional: true
+env "PATH", optional: true
+env "TEST_PORT", type: "port", optional: true
